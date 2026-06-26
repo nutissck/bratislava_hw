@@ -55,7 +55,7 @@ def check_login():
 
 
 
-#інтерфейс
+#інтерфейсІВА
 frame = ctk.CTkFrame(root, corner_radius=15)
 frame.pack(pady=30, padx=20, fill="both", expand=True)
 ctk.CTkLabel(frame,text="Логін", text_color="#2b3545", font=("Tahoma", 18, "bold")).pack()
