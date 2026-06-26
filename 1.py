@@ -28,14 +28,5 @@ def stvorec(x,y):
         text="modry", font=('Arial', 20),
         fill="yellow"
     )
-
 stvorec(50,50)
-mainloop()
-
-
-
-
-
-
-
 root.mainloop()
