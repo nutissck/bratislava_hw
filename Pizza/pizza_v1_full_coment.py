@@ -1,5 +1,7 @@
-from tkinter import *  # Імпортуємо бібліотеку tkinter для створення графічного інтерфейсу
+from tkinter.constants import RIGHT, LEFT
 
+import customtkinter as ctk# Імпортуємо бібліотеку tkinter для створення графічного інтерфейсу
+from PIL import Image
 
 """
 1. **Імпорт бібліотеки tkinter**:
@@ -81,12 +83,17 @@ def update_image(size):
    else:  # За замовчуванням (середній розмір)
        scale_factor = 2
 
+   image = Image.open("images/pizza.png")
 
-   pizza_img = PhotoImage(file="images\pizza.png")  # Завантажуємо зображення піци
-   resized_img = pizza_img.subsample(scale_factor, scale_factor)  # Масштабуємо зображення
-   pizza_label.configure(image=resized_img)  # Оновлюємо зображення у віджеті
-   pizza_label.image = resized_img  # Зберігаємо посилання на зображення (щоб його не видалило)
+   pizza_img = ctk.CTkImage(
+       light_image=image,
+       dark_image=image,
+       size=(200, 200)
+   )
 
+   pizza_label.configure(image=pizza_img)
+   pizza_label.image = pizza_img
+   pizza_label.place(relx=0.5, rely=0.5, anchor="center")
 
 # Функція скидання вибору
 """
@@ -129,86 +136,113 @@ def reset_selection():
   - У правій частині вікна відображається зображення піци.
   - Додаткові фрейми використовуються для організації віджетів у структурований спосіб.
 """
-root = Tk()  # Створюємо головне вікно програми
-root.title("Піцерія")  # Встановлюємо заголовок вікна
-root.geometry("800x500")  # Встановлюємо розміри вікна
-root.configure(padx=10, pady=10)  # Додаємо відступи
+root = ctk.CTk()  # Створюємо головне вікно програми
+ctk.set_appearance_mode("dark")      # Light, Dark, System
+ctk.set_default_color_theme("blue")
 
 
 # Ліва частина для елементів керування
-left_frame = Frame(root)  # Створюємо фрейм для керування
-left_frame.grid(row=0, column=0, sticky=N, padx=10, pady=10)
+left_frame = ctk.CTkFrame(root, corner_radius=20)
+left_frame.pack(side="left", padx=20, pady=20, fill="both", expand=True)
 
 
 # Права частина для відображення піци
-right_frame = Frame(root)  # Створюємо фрейм для відображення піци
-right_frame.grid(row=0, column=1, sticky=N, padx=10, pady=10)
+right_frame = ctk.CTkFrame(root, corner_radius=20)
+right_frame.pack(side="right", ipadx=100, pady=20, fill="both", expand=True)
 
 
 # Фрейм для першого стовпчика (інгредієнти)
-column1 = Frame(left_frame)  # Створюємо фрейм для інгредієнтів
-column1.grid(row=1, column=0, sticky=W, padx=10)
+column1 = ctk.CTkFrame(left_frame, corner_radius=20)  # Створюємо фрейм для інгредієнтів
+column1.grid(row=1, column=0, sticky="we", padx=10, pady=20)
 
 
 # Фрейм для другого стовпчика (розмір піци)
-column2 = Frame(left_frame)  # Створюємо фрейм для вибору розміру
-column2.grid(row=1, column=1, sticky=W, padx=10)
+column2 = ctk.CTkFrame(left_frame, corner_radius=20)  # Створюємо фрейм для вибору розміру
+column2.grid(row=1, column=1, sticky="we", padx=10)
 
 
 # Інгредієнти
-ingredients_label = Label(column1, text="Інгредієнти:", font=("Arial", 14))  # Текстовий напис
-ingredients_label.grid(row=0, column=0, sticky=W, pady=(45, 0))
+ingredients_label = ctk.CTkLabel(column1, text="Інгредієнти:", font=("Arial", 16, 'bold'))  # Текстовий напис
+ingredients_label.grid(row=0, column=0, sticky="w", pady=(10, 10), padx=(20,10))
 
 
 # Опції вибору інгредієнтів
-taste1 = IntVar()  # Змінна для зберігання стану
-Checkbutton(column1, text="Помідори", variable=taste1, onvalue=1, offvalue=0).grid(row=1, column=0, sticky=W)
-taste2 = IntVar()
-Checkbutton(column1, text="Сир", variable=taste2, onvalue=1, offvalue=0).grid(row=2, column=0, sticky=W)
-taste3 = IntVar()
-Checkbutton(column1, text="Курка", variable=taste3, onvalue=1, offvalue=0).grid(row=3, column=0, sticky=W)
-taste4 = IntVar()
-Checkbutton(column1, text="Гриби", variable=taste4, onvalue=1, offvalue=0).grid(row=4, column=0, sticky=W)
-taste5 = IntVar()
-Checkbutton(column1, text="Зелень", variable=taste5, onvalue=1, offvalue=0).grid(row=5, column=0, sticky=W)
+taste1 = ctk.IntVar()  # Змінна для зберігання стану
+ctk.CTkCheckBox(column1, text="🍅 Помідори",font=("Segoe UI", 14), variable=taste1, onvalue=1, offvalue=0,
+    checkbox_height=22,
+    checkbox_width=22, fg_color="#fc1d0d",
+    hover_color="#f57971").grid(row=1, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+taste2 = ctk.IntVar()
+ctk.CTkCheckBox(column1, text="🧀 Сир", font=("Segoe UI", 14),variable=taste2, onvalue=1, offvalue=0, checkbox_height=22,
+    checkbox_width=22, fg_color="#e0ce07",
+    hover_color="#fff47d").grid(row=2, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+taste3 = ctk.IntVar()
+ctk.CTkCheckBox(column1, text="🍗 Курка",font=("Segoe UI", 14), variable=taste3, onvalue=1, offvalue=0, checkbox_height=22,
+    checkbox_width=22, fg_color="#f79d79",
+    hover_color="#fcc6b1").grid(row=3, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+taste4 = ctk.IntVar()
+ctk.CTkCheckBox(column1, text="🍄 Гриби", font=("Segoe UI", 14),variable=taste4, onvalue=1, offvalue=0, checkbox_height=22,
+    checkbox_width=22, fg_color="#ad956d",
+    hover_color="#c2ac8a").grid(row=4, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+taste5 = ctk.IntVar()
+ctk.CTkCheckBox(column1, text="🌿 Зелень", font=("Segoe UI", 14), variable=taste5, onvalue=1, offvalue=0, checkbox_height=22,
+    checkbox_width=22, fg_color="#07f21f",
+    hover_color="#66ff75").grid(row=5, column=0, sticky='w', pady=(0, 7), padx=(10,10))
 
 
 # Розмір піци
-size_label = Label(column2, text="Розмір піци:", font=("Arial", 14))  # Текстовий напис
-size_label.grid(row=0, column=0, sticky=W, pady=5)
+size_label = ctk.CTkLabel(column2, text="Розмір піци:", font=("Arial", 16, 'bold'))  # Текстовий напис
+size_label.grid(row=0, column=0, sticky='w',  pady=(10, 10), padx=(20,10))
 
 
-size = IntVar()  # Змінна для зберігання вибору розміру
-Radiobutton(column2, text="Мала", variable=size, value=1).grid(row=1, column=0, sticky=W)
-Radiobutton(column2, text="Середня", variable=size, value=2).grid(row=2, column=0, sticky=W)
-Radiobutton(column2, text="Велика", variable=size, value=3).grid(row=3, column=0, sticky=W)
-
+size = ctk.IntVar()  # Змінна для зберігання вибору розміру
+ctk.CTkRadioButton(column2, text="Мала", variable=size, value=1, font=("Segoe UI", 14),
+    corner_radius=10, radiobutton_width=20,
+    radiobutton_height=20,
+    fg_color="#fcfbfa",
+    hover_color="#d9d9d9").grid(row=1, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+ctk.CTkRadioButton(column2, text="Середня", variable=size, value=2, font=("Segoe UI", 14),
+    corner_radius=10, radiobutton_width=20,
+    radiobutton_height=20,
+    fg_color="#fcfbfa",
+    hover_color="#d9d9d9").grid(row=2, column=0, sticky='w', pady=(0, 7), padx=(10,10))
+ctk.CTkRadioButton(column2, text="Велика", variable=size, value=3, font=("Segoe UI", 14),
+    corner_radius=10, radiobutton_width=20,
+    radiobutton_height=20,
+    fg_color="#fcfbfa",
+    hover_color="#d9d9d9").grid(row=3, column=0, sticky='w', pady=(0, 7), padx=(10,10))
 
 # Шкала для вибору соусу
-scale_label = Label(left_frame, text="Соус", font=("Arial", 14))  # Текстовий напис
-scale_label.grid(row=2, column=0, columnspan=2, pady=(20, 0))
+scale_label = ctk.CTkLabel(left_frame, text="🌶 Гострота соусу", font=("Arial", 14))  # Текстовий напис
+scale_label.grid(row=2, column=0, columnspan=2, pady=(0, 0))
 
-
-scale = Scale(left_frame, from_=0, to=5, orient=HORIZONTAL, length=300)  # Шкала для вибору
+scale = ctk.CTkSlider(left_frame,from_=0,to=5,number_of_steps=5, width=300,corner_radius=10,button_color="#d9d8d7",
+        progress_color="#a6a5a4",
+        button_hover_color="#969696")
 scale.grid(row=3, column=0, columnspan=2, pady=5)
 
 
 # Кнопки
-button_frame = Frame(left_frame)  # Фрейм для кнопок
-button_frame.grid(row=4, column=0, columnspan=2, pady=10)
+button_frame = ctk.CTkFrame(left_frame, corner_radius=20)  # Фрейм для кнопок
+button_frame.grid(row=4, column=0, columnspan=2, pady=10, padx=10)
 
 
-Button(button_frame, text="Порахувати", command=pizza_price, font=("Arial", 14)).pack(side=LEFT, padx=5)  # Кнопка обчислення
-Button(button_frame, text="Скинути", command=reset_selection, font=("Arial", 14)).pack(side=RIGHT, padx=5)  # Кнопка скидання
+ctk.CTkButton(button_frame, text="Порахувати", font=("Arial", 14), command=pizza_price,
+    width=180,
+    height=40,
+    corner_radius=15,fg_color="#8a8988", hover_color="#70706f").pack(side="left", padx=5)  # Кнопка обчислення
+ctk.CTkButton(button_frame, text="Скинути", font=("Arial", 14), command=reset_selection, width=180,
+    height=40,
+    corner_radius=15, fg_color="#8a8988", hover_color="#70706f").pack(side="right", padx=5)# Кнопка скидання
 
 
 # Виведення ціни
-label_price = Label(left_frame, text="Ціна: 0 грн", font=("Arial", 16, "bold"))  # Текстовий напис
+label_price = ctk.CTkLabel(left_frame, text="Ціна: 0 грн", font=("Arial", 16, "bold"))  # Текстовий напис
 label_price.grid(row=5, column=0, columnspan=2, pady=10)
 
 
 # Відображення піци
-pizza_label = Label(right_frame, text="Піца з'явиться тут")  # Поле для зображення піци
+pizza_label = ctk.CTkLabel(right_frame, text="Піца з'явиться тут")  # Поле для зображення піци
 pizza_label.pack()
 
 
